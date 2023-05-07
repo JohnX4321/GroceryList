@@ -1,27 +1,26 @@
-- name: Expo GitHub Action
-  # You may pin to the exact commit or the version.
-  # uses: expo/expo-github-action@4479f0b3692e25169fa71a02c30d6586ec2f5601
-  uses: expo/expo-github-action@8.0.0
-  with:
-    # Expo CLI version to install
-    expo-version: # optional
-    # If Expo CLI should be cached to speed up installation
-    expo-cache: # optional, default is true
-    # EAS CLI version to install
-    eas-version: # optional
-    # If EAS CLI should be cached to speed up installation
-    eas-cache: # optional, default is true
-    # The package manager used to install the CLIs
-    packager: # optional, default is yarn
-    # If the action should patch the ENOSPC errors
-    patch-watchers: # optional, default is true
-    # Your Expo token, for authentication. (use with secrets)
-    token: # optional
-    # A custom remote cache key to use for EAS CLI.
-    eas-cache-key: # optional
-    # A custom remote cache key to use for Expo CLI.
-    expo-cache-key: # optional
-    # Your Expo username, for authentication.
-    username: # optional
-    # Your Expo password, for authentication. (use with secrets)
-    password: # optional
+name: Expo CI CD
+
+on:
+  push :
+    branches : [main]
+
+jobs:
+  Build-for-android:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
+      - uses: actions/setup-java@v1.4.3
+        with:
+          java-version: '9.0.4' # The JDK version to make available on the path.
+          java-package: jdk # (jre, jdk, or jdk+fx) - defaults to jdk
+          architecture: x64 # (x64 or x86) - defaults to x64
+      - uses: expo/expo-github-action@v5
+        with:
+          expo-version: 3.x
+      - name: Install deps
+        run: yarn install
+      - name: Build Android APK Bundle
+        run: expo build:android
