@@ -6,7 +6,7 @@ import GroceryItem from "../utils/GroceryItemContainer";
 import NewGroceryItem from "../utils/NewItemContainer";
 
 const Home = (props) => {
-    console.log(props);
+    //console.log(props);
     const done = props.items.filter((i)=>i.done)
     const remaining = props.items.filter((i)=>!i.done)
     const theme = props.darkMode?MD3DarkTheme:DefaultTheme;
